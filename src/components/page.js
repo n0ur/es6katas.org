@@ -9,6 +9,7 @@ export default class Page extends React.Component {
       <body>
         <h1>ES6 Katas</h1>
         <p>Just learn a bit of ES6 daily, take one kata a day and fix it away.</p>
+        <RecentlyUsed />
         <KataGroups groups={kataGroups} />
         <footer>
           by <a href="http://uxebu.com">uxebu</a> --- 
@@ -50,11 +51,39 @@ class KataGroup extends React.Component {
 class KataLink extends React.Component {
   handleClick(e) {
     const id = e.currentTarget.dataset.id;
-    let count = parseInt(sessionStorage.getItem(id), 10) || 0;
-    sessionStorage.setItem(id, count + 1);
+    let currentListStr = sessionStorage.getItem('recent');
+
+    let currentList;
+    if (currentListStr) {
+      currentList = currentListStr.split(',');
+    } else {
+      currentList = [];
+    }
+
+    currentList = currentList.filter(function(value) {
+      return value !== id;
+    });
+    currentList.push(id);
+    sessionStorage.setItem('recent', currentList);
   }
   render() {
     const {url, text} = this.props;
     return <a href={url} onClick={this.handleClick} data-id={text}>{text}</a>;
+  }
+}
+
+class RecentlyUsed extends React.Component {
+  render() {
+    // for (sessionStorage.length)
+
+    // Object.keys(sessionStorage).forEach(function(key) {
+      // console.log(key, obj[key]);
+    // });
+    return (
+      // <KataGroup group={group} key="Recently Used"/>
+      <div className="group">
+        <h2>Recently Used</h2>
+      </div>
+    );
   }
 }
