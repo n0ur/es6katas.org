@@ -48,8 +48,13 @@ class KataGroup extends React.Component {
 }
 
 class KataLink extends React.Component {
+  handleClick(e) {
+    const id = e.currentTarget.dataset.id;
+    let count = parseInt(sessionStorage.getItem(id), 10) || 0;
+    sessionStorage.setItem(id, count + 1);
+  }
   render() {
     const {url, text} = this.props;
-    return <a href={url}>{text}</a>;
+    return <a href={url} onClick={this.handleClick} data-id={text}>{text}</a>;
   }
 }
