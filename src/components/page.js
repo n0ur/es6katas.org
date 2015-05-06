@@ -51,7 +51,7 @@ class KataGroup extends React.Component {
 class KataLink extends React.Component {
   handleClick(e) {
     const id = e.currentTarget.dataset.id;
-    let currentListStr = sessionStorage.getItem('recent');
+    let currentListStr = localStorage.getItem('recent');
 
     let currentList;
     if (currentListStr) {
@@ -64,25 +64,31 @@ class KataLink extends React.Component {
       return value !== id;
     });
     currentList.push(id);
-    sessionStorage.setItem('recent', currentList);
+    localStorage.setItem('recent', currentList);
   }
   render() {
-    const {url, text} = this.props;
-    return <a href={url} onClick={this.handleClick} data-id={text}>{text}</a>;
+    const {url, text, id} = this.props;
+    return <a href={url} onClick={this.handleClick} data-id={id}>{text}</a>;
   }
 }
 
 class RecentlyUsed extends React.Component {
   render() {
-    // for (sessionStorage.length)
+    let currentListStr = localStorage.getItem('recent');
 
-    // Object.keys(sessionStorage).forEach(function(key) {
-      // console.log(key, obj[key]);
-    // });
+    let currentList;
+    if (currentListStr) {
+      currentList = currentListStr.split(',');
+    } else {
+      currentList = [];
+    }
     return (
-      // <KataGroup group={group} key="Recently Used"/>
       <div className="group">
-        <h2>Recently Used</h2>
+        <h2>Recently Clicked</h2>
+        {currentList.reverse().map(function (text) {
+          const url = `http://tddbin.com/#?kata=es6/language/${text}`;
+          return <KataLink url={url} text={text} id={text} />
+        })}
       </div>
     );
   }
