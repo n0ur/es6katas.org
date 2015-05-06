@@ -51,20 +51,7 @@ class KataGroup extends React.Component {
 class KataLink extends React.Component {
   handleClick(e) {
     const id = e.currentTarget.dataset.id;
-    let currentListStr = localStorage.getItem('recent');
-
-    let currentList;
-    if (currentListStr) {
-      currentList = currentListStr.split(',');
-    } else {
-      currentList = [];
-    }
-
-    currentList = currentList.filter(function(value) {
-      return value !== id;
-    });
-    currentList.push(id);
-    localStorage.setItem('recent', currentList);
+    addToLocalStorage(id)
   }
   render() {
     const {url, text, id} = this.props;
@@ -74,14 +61,7 @@ class KataLink extends React.Component {
 
 class RecentlyUsed extends React.Component {
   render() {
-    let currentListStr = localStorage.getItem('recent');
-
-    let currentList;
-    if (currentListStr) {
-      currentList = currentListStr.split(',');
-    } else {
-      currentList = [];
-    }
+    let currentList = getLocalStorage();
     return (
       <div className="group">
         <h2>Recently Clicked</h2>
@@ -92,4 +72,18 @@ class RecentlyUsed extends React.Component {
       </div>
     );
   }
+}
+
+function getLocalStorage () {
+  let ls = localStorage.getItem('recent');
+  return ls ? ls.split(',') : [];
+}
+
+function addToLocalStorage (id) {
+  let currentList = getLocalStorage();
+  currentList = currentList.filter(function (value) {
+    return value !== id;
+  });
+  currentList.push(id);
+  localStorage.setItem('recent', currentList);
 }
